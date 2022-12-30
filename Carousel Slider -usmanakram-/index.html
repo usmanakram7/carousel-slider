@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Images Slider</title>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        id="left"
+        src="./assets/leftArrow.jpg"
+        class="leftArrow arrows"
+        alt=""
+      />
+      <div class="carousel">
+        <img src="./assets/1.jpg" alt="" />
+        <img src="./assets/2.png" alt="" />
+        <img src="./assets/3.jpg" alt="" />
+        <img src="./assets/5.jpg" alt="" />
+        <img src="./assets/6.jpg" alt="" />
+        <img src="./assets/7.jpg" alt="" />
+        <img src="./assets/8.jpg" alt="" />
+      </div>
+      <img
+        id="right"
+        src="./assets/RightArrow (2).jpg"
+        class="rightArrow arrows"
+        alt=""
+      />
+    </div>
+
+    <!-- javaScript -->
+
+    <script>
+      const carousel = document.querySelector(".carousel");
+      firstImg = carousel.querySelectorAll(".carousel img")[0];
+      const arrows = document.querySelectorAll(".arrows");
+
+      let showHideIcons = () => {
+        let scrollWidth = carousel.scrollWidth - carousel.clientWidth;
+        arrows[0].style.display = carousel.scrollLeft == 0 ? "none" : "block";
+
+        arrows[1].style.display =
+          carousel.scrollLeft == scrollWidth ? "none" : "block";
+      };
+
+      console.log(arrows[1]);
+
+      let ImageWidth = 307;
+
+      arrows.forEach((icon) => {
+        icon.addEventListener("click", () => {
+          carousel.scrollLeft += icon.id == "left" ? -ImageWidth : ImageWidth;
+          console.log(icon.id);
+          setTimeout(() => showHideIcons(), 60);
+        });
+      });
+
+      let isDragStart = false,
+        prevPageLeft,
+        prevScrollLeft;
+
+      const dragStart = (e) => {
+        isDragStart = true;
+        prePageLeft = e.pageX;
+        prevScrollLeft = carousel.scrollLeft;
+      };
+
+      const dragging = (e) => {
+        if (!isDragStart) return;
+        e.preventDefault();
+        carousel.classList.add("dragging");
+        let positionDiff = e.pageX - prePageLeft;
+        carousel.scrollLeft = prevScrollLeft - positionDiff;
+      };
+
+      const dragStop = () => {
+        isDragStart = false;
+        carousel.classList.remove("dragging");
+      };
+
+      carousel.addEventListener("mousedown", dragStart);
+      carousel.addEventListener("mousemove", dragging);
+      carousel.addEventListener("mouseup", dragStop);
+    </script>
+  </body>
+</html>
